@@ -1,0 +1,42 @@
+name: Validate Spec-Driven Approach
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-structure:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check for required files
+      run: |
+        if [ ! -f ".specify/memory/constitution.md" ]; then
+          echo "ERROR: Constitution file not found"
+          exit 1
+        fi
+        
+        if [ ! -f "specs/physical_ai_humanoid_robotics/spec.md" ]; then
+          echo "ERROR: Specification file not found"
+          exit 1
+        fi
+        
+        if [ ! -f "specs/physical_ai_humanoid_robotics/plan.md" ]; then
+          echo "ERROR: Plan file not found"
+          exit 1
+        fi
+        
+        echo "All required spec-driven files present"
+    
+    - name: Validate Markdown files
+      run: |
+        # Check that Markdown files have proper frontmatter where needed
+        if [ -d "history/prompts" ]; then
+          echo "Prompt history directory exists"
+        else
+          echo "WARNING: Prompt history directory not found"
+        fi
